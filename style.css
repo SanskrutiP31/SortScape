@@ -1,84 +1,61 @@
 body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to right, #fdb7fe, #aaf5ff);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-}
-
-h1 {
-  margin: 20px;
-  color: rgb(66, 38, 104);
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
-  text-align: center;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
 .container {
-  width: 90%;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 10px;
+    width: 90%;
+    max-width: 1200px;
+    padding: 2rem;
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    color: #000;
+    text-align: center;
 }
 
 .controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  border-radius: 20px;
-  margin-bottom: 20px;
-}
-
-.glass {
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-label, select, input, button {
-  color: rgb(0, 0, 0);
-  font-size: 14px;
-  border: none;
-}
-
-input[type="range"], select {
-  padding: 5px;
-  border-radius: 5px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
 }
 
 button {
-  background: linear-gradient(145deg, #503c85, #4877b0);
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  color: white;
+    padding: 0.5rem 1rem;
+    background-color: #ff7e5f;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
 button:hover {
-  transform: scale(1.05);
+    background-color: #feb47b;
 }
 
-.bars-container {
-  display: flex;
-  align-items: flex-end;
-  height: 400px;
-  gap: 2px;
-  border-radius: 10px;
-  padding: 10px;
-  background: rgba(41, 37, 114, 0.1);
+#barContainer {
+    display: flex;
+    align-items: flex-end;
+    height: 400px;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .bar {
-  background: linear-gradient(to top, #503c85, #4877b0);
-  width: 100%;
-  border-radius: 3px 3px 0 0;
-  transition: height 0.2s ease;
+    background: linear-gradient(to top right, #ff6a00, #ee0979);
+    margin: 0 1px;
+    border-radius: 5px 5px 0 0;
 }
