@@ -1,35 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sorting Visualizer</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SortScape</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Sorting Visualizer</h1>
-    <div class="controls glass">
-      <label for="size">Array Size</label>
-      <input type="range" min="10" max="100" value="50" id="size" />
-
-      <label for="speedRange">Speed</label>
-      <input type="range" min="1" max="100" value="50" id="speedRange" />
-
-      <label for="algorithm">Algorithm</label>
-      <select id="algorithm">
-        <option value="bubble">Bubble Sort</option>
-        <option value="selection">Selection Sort</option>
-        <option value="insertion">Insertion Sort</option>
-        <option value="merge">Merge Sort</option>
-        <option value="quick">Quick Sort</option>
-      </select>
-
-      <button id="sortBtn">Sort</button>
-      <button id="newArrayBtn">New Array</button>
+    <div class="container glass">
+        <h1>SortScape</h1>
+        <div class="controls">
+            <label>Size: <input type="range" id="sizeSlider" min="10" max="100" value="50"></label>
+            <label>Speed: <input type="range" id="speedSlider" min="1" max="100" value="50"></label>
+            <label>
+                Algorithm:
+                <select id="algoSelect">
+                    <option value="bubble">Bubble Sort</option>
+                    <option value="insertion">Insertion Sort</option>
+                    <option value="selection">Selection Sort</option>
+                    <option value="merge">Merge Sort</option>
+                    <option value="quick">Quick Sort</option>
+                </select>
+            </label>
+            <button onclick="generateArray()">Generate New Array</button>
+            <button onclick="sort()">Sort</button>
+        </div>
+        <div id="barContainer"></div>
     </div>
-    <div class="bars-container" id="barsContainer"></div>
-  </div>
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
+
