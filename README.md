@@ -1,4 +1,4 @@
-Sorting Visualizer
+SortScape 
 
 A beautiful, interactive sorting algorithm visualizer built using HTML, CSS (Glassmorphism + Gradients), and JavaScript.
 
