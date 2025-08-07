@@ -1,159 +1,145 @@
-const container = document.getElementById("barsContainer");
-const sizeSlider = document.getElementById("size");
-const algorithmSelect = document.getElementById("algorithm");
-const sortBtn = document.getElementById("sortBtn");
-const newArrayBtn = document.getElementById("newArrayBtn");
-const speedSlider = document.getElementById("speedRange");
-
-let array = [];
+let bars = [];
 let delay = 50;
+let size = 50;
 
-sizeSlider.addEventListener("input", generateBars);
-speedSlider.addEventListener("input", () => {
-  delay = 101 - parseInt(speedSlider.value);
+const barContainer = document.getElementById('barContainer');
+const speedSlider = document.getElementById('speedSlider');
+const sizeSlider = document.getElementById('sizeSlider');
+
+speedSlider.addEventListener('input', () => {
+    delay = 100 - speedSlider.value;
+});
+sizeSlider.addEventListener('input', () => {
+    size = sizeSlider.value;
+    generateArray();
 });
 
-newArrayBtn.addEventListener("click", generateBars);
-
-function generateBars() {
-  array = [];
-  container.innerHTML = "";
-  for (let i = 0; i < sizeSlider.value; i++) {
-    const value = Math.floor(Math.random() * 400) + 10;
-    array.push(value);
-    const bar = document.createElement("div");
-    bar.classList.add("bar");
-    bar.style.height = `${value}px`;
-    bar.style.width = `${100 / sizeSlider.value}%`;
-    container.appendChild(bar);
-  }
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function swap(el1, el2) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      let temp = el1.style.height;
-      el1.style.height = el2.style.height;
-      el2.style.height = temp;
-      resolve();
-    }, delay);
-  });
+function generateArray() {
+    bars = [];
+    barContainer.innerHTML = '';
+    for (let i = 0; i < size; i++) {
+        const value = Math.floor(Math.random() * 100) + 1;
+        bars.push(value);
+        const bar = document.createElement('div');
+        bar.classList.add('bar');
+        bar.style.height = `${value * 3}px`;
+        bar.style.width = `${100 / size}%`;
+        barContainer.appendChild(bar);
+    }
 }
+
+async function sort() {
+    const algo = document.getElementById('algoSelect').value;
+    switch (algo) {
+        case 'bubble': await bubbleSort(); break;
+        case 'insertion': await insertionSort(); break;
+        case 'selection': await selectionSort(); break;
+        case 'merge': await mergeSort(0, bars.length - 1); break;
+        case 'quick': await quickSort(0, bars.length - 1); break;
+    }
+}
+
+// Sorting Algorithms
 
 async function bubbleSort() {
-  const bars = document.querySelectorAll(".bar");
-  for (let i = 0; i < bars.length; i++) {
-    for (let j = 0; j < bars.length - i - 1; j++) {
-      if (
-        parseInt(bars[j].style.height) > parseInt(bars[j + 1].style.height)
-      ) {
-        await swap(bars[j], bars[j + 1]);
-      }
+    for (let i = 0; i < bars.length; i++) {
+        for (let j = 0; j < bars.length - i - 1; j++) {
+            if (bars[j] > bars[j + 1]) {
+                [bars[j], bars[j + 1]] = [bars[j + 1], bars[j]];
+                renderBars();
+                await sleep(delay);
+            }
+        }
     }
-  }
-}
-
-async function selectionSort() {
-  const bars = document.querySelectorAll(".bar");
-  for (let i = 0; i < bars.length; i++) {
-    let minIndex = i;
-    for (let j = i + 1; j < bars.length; j++) {
-      if (
-        parseInt(bars[j].style.height) < parseInt(bars[minIndex].style.height)
-      ) {
-        minIndex = j;
-      }
-    }
-    await swap(bars[i], bars[minIndex]);
-  }
 }
 
 async function insertionSort() {
-  const bars = document.querySelectorAll(".bar");
-  for (let i = 1; i < bars.length; i++) {
-    let j = i;
-    while (
-      j > 0 &&
-      parseInt(bars[j - 1].style.height) > parseInt(bars[j].style.height)
-    ) {
-      await swap(bars[j], bars[j - 1]);
-      j--;
+    for (let i = 1; i < bars.length; i++) {
+        let key = bars[i];
+        let j = i - 1;
+        while (j >= 0 && bars[j] > key) {
+            bars[j + 1] = bars[j];
+            j = j - 1;
+            renderBars();
+            await sleep(delay);
+        }
+        bars[j + 1] = key;
+        renderBars();
+        await sleep(delay);
     }
-  }
 }
 
-async function mergeSort(start = 0, end = array.length - 1) {
-  if (start >= end) return;
-  const mid = Math.floor((start + end) / 2);
-  await mergeSort(start, mid);
-  await mergeSort(mid + 1, end);
-  await merge(start, mid, end);
-  generateBars(); // Refresh view
+async function selectionSort() {
+    for (let i = 0; i < bars.length; i++) {
+        let minIdx = i;
+        for (let j = i + 1; j < bars.length; j++) {
+            if (bars[j] < bars[minIdx]) minIdx = j;
+        }
+        [bars[i], bars[minIdx]] = [bars[minIdx], bars[i]];
+        renderBars();
+        await sleep(delay);
+    }
+}
+
+async function mergeSort(start, end) {
+    if (start >= end) return;
+    const mid = Math.floor((start + end) / 2);
+    await mergeSort(start, mid);
+    await mergeSort(mid + 1, end);
+    await merge(start, mid, end);
+    renderBars();
+    await sleep(delay);
 }
 
 async function merge(start, mid, end) {
-  let left = array.slice(start, mid + 1);
-  let right = array.slice(mid + 1, end + 1);
-  let i = 0,
-    j = 0,
-    k = start;
-
-  while (i < left.length && j < right.length) {
-    if (left[i] < right[j]) {
-      array[k++] = left[i++];
-    } else {
-      array[k++] = right[j++];
+    const left = bars.slice(start, mid + 1);
+    const right = bars.slice(mid + 1, end + 1);
+    let i = 0, j = 0, k = start;
+    while (i < left.length && j < right.length) {
+        if (left[i] <= right[j]) bars[k++] = left[i++];
+        else bars[k++] = right[j++];
     }
-  }
-
-  while (i < left.length) array[k++] = left[i++];
-  while (j < right.length) array[k++] = right[j++];
-
-  await new Promise((resolve) => setTimeout(resolve, delay));
+    while (i < left.length) bars[k++] = left[i++];
+    while (j < right.length) bars[k++] = right[j++];
 }
 
-async function quickSort(start = 0, end = array.length - 1) {
-  if (start >= end) return;
-  const pivotIndex = await partition(start, end);
-  await quickSort(start, pivotIndex - 1);
-  await quickSort(pivotIndex + 1, end);
-  generateBars(); // Refresh view
+async function quickSort(start, end) {
+    if (start >= end) return;
+    const pivotIndex = await partition(start, end);
+    await quickSort(start, pivotIndex - 1);
+    await quickSort(pivotIndex + 1, end);
+    renderBars();
+    await sleep(delay);
 }
 
 async function partition(start, end) {
-  let pivot = array[end];
-  let pIndex = start;
-
-  for (let i = start; i < end; i++) {
-    if (array[i] < pivot) {
-      [array[i], array[pIndex]] = [array[pIndex], array[i]];
-      pIndex++;
+    const pivot = bars[end];
+    let i = start - 1;
+    for (let j = start; j < end; j++) {
+        if (bars[j] < pivot) {
+            i++;
+            [bars[i], bars[j]] = [bars[j], bars[i]];
+            renderBars();
+            await sleep(delay);
+        }
     }
-  }
-
-  [array[pIndex], array[end]] = [array[end], array[pIndex]];
-  await new Promise((resolve) => setTimeout(resolve, delay));
-  return pIndex;
+    [bars[i + 1], bars[end]] = [bars[end], bars[i + 1]];
+    return i + 1;
 }
 
-sortBtn.addEventListener("click", async () => {
-  switch (algorithmSelect.value) {
-    case "bubble":
-      await bubbleSort();
-      break;
-    case "selection":
-      await selectionSort();
-      break;
-    case "insertion":
-      await insertionSort();
-      break;
-    case "merge":
-      await mergeSort();
-      break;
-    case "quick":
-      await quickSort();
-      break;
-  }
-});
+function renderBars() {
+    barContainer.innerHTML = '';
+    for (let i = 0; i < bars.length; i++) {
+        const bar = document.createElement('div');
+        bar.classList.add('bar');
+        bar.style.height = `${bars[i] * 3}px`;
+        bar.style.width = `${100 / size}%`;
+        barContainer.appendChild(bar);
+    }
+}
 
-generateBars();
+generateArray();
